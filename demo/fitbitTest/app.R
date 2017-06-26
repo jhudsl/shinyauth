@@ -22,13 +22,20 @@ ui <- fluidPage(
 server <- function(input, output) {
 
   #server side call of the drawr module
-  drawChart <- callModule(shinyauth,
+  authButton <- callModule(shinyauth,
                           "fitbit_login",
                           api_url = 'https://www.fitbit.com/oauth2/authorize',
                           api_key =  "2287QM",
                           scope = c("heartrate", "activity", "sleep"))
+
+  #logic for what happens after a user has drawn their values. Note this will fire on editing again too.
+  observeEvent(authButton(), {
+    userToken = authButton()
+
+    print(userToken)
+  })
+
 }
 
 # Run the application
 shinyApp(ui = ui, server = server)
-

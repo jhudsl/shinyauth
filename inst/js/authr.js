@@ -27,11 +27,12 @@ var addressBar = function addressBar() {
 var parseToken = function parseToken(url) {
   return url.split("#access_token=")[1];
 };
-
 var buttonText = function buttonText(dom_target, message) {
   return document.getElementById(dom_target).innerHTML = message;
 };
-
+var clearURLOptions = function clearURLOptions() {
+  return window.history.pushState(null, null, window.location.pathname);
+};
 var authButton = function authButton(_ref2) {
   var dom_target = _ref2.dom_target,
       main_url = _ref2.main_url,
@@ -44,6 +45,7 @@ var authButton = function authButton(_ref2) {
     return console.log("Token is, ", token);
   } : _ref2$onTokenReceive;
 
+  console.log("authr has run");
   var page = addressBar(),
       hasToken = page.has_token,
       apiQuery = makeQueryString({ main_url: main_url, api_key: api_key, redirect_uri: page.main_url, scope: scope }),
@@ -52,6 +54,7 @@ var authButton = function authButton(_ref2) {
   if (hasToken) {
     buttonText(dom_target, "Logged In");
     onTokenReceive(token);
+    clearURLOptions(); //hide ugly url. 
   } else {
     buttonText(dom_target, "Log In");
     document.getElementById(dom_target).onclick = function () {

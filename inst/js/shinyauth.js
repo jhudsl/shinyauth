@@ -1,20 +1,18 @@
 //logic for returning to shiny goes here.
 const sendToShiny = (id) => {
-  const send_dest = id + "-doneDragging";
-
-  //return (data) => Shiny.onInputChange(send_dest, data.map(d=>d.y))
-
+  const send_dest = id + "token";
+  return (token) => Shiny.onInputChange(send_dest, token);
 };
 
 $(document).on('shiny:connected', event => {
     console.log("shiny is connected.");
 
     //watch for message from server saying it's ready.
-    //Shiny.addCustomMessageHandler("initialize_chart",
-    //    params => {
-    //      params.dom_target = "#" + params.id + '-youDrawIt'; //where we place the chart
-    //      params.on_done_drawing = sendToShiny(params.id);    //function that sends data back to shiny.
-    //      const ourChart = new youDrawIt(params);             //initialize the chart itself.
-    //    }
-    //);
+    Shiny.addCustomMessageHandler("initialize_button",
+        params => {
+          console.log("params", params)
+          params.onTokenReceive = sendToShiny(params.id);
+          const loginButton = authr( params );
+        }
+    );
 });

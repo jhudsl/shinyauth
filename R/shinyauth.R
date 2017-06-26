@@ -18,9 +18,7 @@ shinyauthUI <- function(id) {
         tags$script(HTML(shinyauthjs))
       )
     ),
-    div(id = ns("authButton"),
-        h1("hi")
-    )
+    tags$button(id = ns("authButton"), "Login Button")
 
   ) #end tag list.
 }
@@ -49,15 +47,17 @@ shinyauth <- function(input, output, session,
 
   #Send over a message to the javascript with the id of the div we're placing this chart in along with the data we're placing in it.
   observe({ session$sendCustomMessage(
-    type    = "initialize_button",
+    type = "initialize_button",
     message = list(
-      api_url,
-      api_key,
-      scope)
+      dom_target = session$ns("authButton"),
+      main_url = api_url,
+      api_key = api_key,
+      scope = scope,
+      id  = session$ns(""))
   )
   })
 
   # The user's api token in string format.
-  result <- reactive({ input$loggedIn })
+  result <- reactive({ input$token })
   return(result)
 }
