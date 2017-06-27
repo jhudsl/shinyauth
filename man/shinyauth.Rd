@@ -4,7 +4,8 @@
 \alias{shinyauth}
 \title{Server side component. You supply this with your api credentials.}
 \usage{
-shinyauth(input, output, session, api_url, api_key, scope)
+shinyauth(input, output, session, api_url, api_key, scope,
+  response_type = "code")
 }
 \arguments{
 \item{input}{you can ignore this as it is taken care of by shiny}

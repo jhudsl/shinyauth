@@ -42,22 +42,29 @@ shinyauthUI <- function(id) {
 #'     y_key = "metric")
 shinyauth <- function(input, output, session,
                       api_url,
-                      api_key,
-                      scope){
+                      key,
+                      secret,
+                      scope,
+                      response_type = "code"){
 
-  #Send over a message to the javascript with the id of the div we're placing this chart in along with the data we're placing in it.
+  key_secret_code <- .to_base_64(paste0(key, ":", secret))
+
+  #Send over a message to javascript.
   observe({ session$sendCustomMessage(
     type = "initialize_button",
     message = list(
-      dom_target = session$ns("authButton"),
-      main_url = api_url,
-      api_key = api_key,
-      scope = scope,
-      id  = session$ns(""))
-  )
+                    dom_target = session$ns("authButton"),
+                    main_url = api_url,
+                    api_key = key,
+                    scope = scope,
+                    response_type = response_type,
+                    id  = session$ns(""))
+                  )
   })
 
   # The user's api token in string format.
-  result <- reactive({ input$token })
+  result <- reactive({ input$code })
+
+
   return(result)
 }

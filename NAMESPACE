@@ -2,5 +2,3 @@
 
 export(shinyauth)
 export(shinyauthUI)
-export(shinydrawr)
-export(shinydrawrUI)
