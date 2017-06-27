@@ -27,10 +27,3 @@ server <- function(input, output) {
 
 # Run the application
 shinyApp(ui = ui, server = server, options = c("port" = 1410))
-
-#
-# token_request <- getToken(
-#   auth_code = "338480545b0ea7128571da5a360fac56f4fc07f6",
-#   redirect_uri = "http://127.0.0.1:1410/",
-#   key = api_keys$key,
-#   token_url = api_keys$token_url)
