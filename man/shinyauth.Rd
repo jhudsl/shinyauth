@@ -4,8 +4,7 @@
 \alias{shinyauth}
 \title{Server side component. You supply this with your api credentials.}
 \usage{
-shinyauth(input, output, session, api_url, api_key, scope,
-  response_type = "code")
+shinyauth(input, output, session, api_info, response_type = "code")
 }
 \arguments{
 \item{input}{you can ignore this as it is taken care of by shiny}
@@ -14,7 +13,7 @@ shinyauth(input, output, session, api_url, api_key, scope,
 
 \item{session}{you can ignore this as it is taken care of by shiny}
 
-\item{api_url}{destination of the api you're querying from. For instance the fitbit api is 'https://www.fitbit.com/oauth2/authorize'}
+\item{api_info}{A named list of the various api values you need to authenticate. "key", "id", "secret", "url", "token_url" 'https://www.fitbit.com/oauth2/authorize'}
 
 \item{api_key}{your apps personal api key.}
 

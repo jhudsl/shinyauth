@@ -29,7 +29,7 @@ shinyauthUI <- function(id) {
 #' @param input you can ignore this as it is taken care of by shiny
 #' @param output you can ignore this as it is taken care of by shiny
 #' @param session you can ignore this as it is taken care of by shiny
-#' @param api_url destination of the api you're querying from. For instance the fitbit api is 'https://www.fitbit.com/oauth2/authorize'
+#' @param api_info A named list of the various api values you need to authenticate. "key", "id", "secret", "url", "token_url" 'https://www.fitbit.com/oauth2/authorize'
 #' @param api_key your apps personal api key.
 #' @param scope a vector of what you're requesting access to in the API. See the given api docs for examples.
 #' @export
@@ -41,30 +41,40 @@ shinyauthUI <- function(id) {
 #'     x_key = "time",
 #'     y_key = "metric")
 shinyauth <- function(input, output, session,
-                      api_url,
-                      key,
-                      secret,
-                      scope,
+                      api_info,
                       response_type = "code"){
 
-  key_secret_code <- .to_base_64(paste0(key, ":", secret))
+  key_secret_code <- .to_base_64(paste0(api_info$key, ":", api_info$secret))
 
   #Send over a message to javascript.
   observe({ session$sendCustomMessage(
     type = "initialize_button",
     message = list(
                     dom_target = session$ns("authButton"),
-                    main_url = api_url,
-                    api_key = key,
-                    scope = scope,
+                    main_url = api_info$auth_url,
+                    api_key = api_info$key,
+                    scope = api_info$scope,
                     response_type = response_type,
                     id  = session$ns(""))
                   )
   })
 
   # The user's api token in string format.
-  result <- reactive({ input$code })
+  result <- reactive({
+
+    token_request <- getToken(
+      auth_code = input$code ,
+      redirect_uri = api_info$redirect_uri,
+      key = api_info$key,
+      token_url = api_info$token_url,
+      key_secret_code = key_secret_code
+      )
+
+
+    token_request$access_token
+    })
 
 
   return(result)
 }
+
